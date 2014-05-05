@@ -1,0 +1,18 @@
+//	TAG	TLBI	VPO
+// ----	---	-----------
+//	VPN
+
+//extract VPN
+//extract TAG + TLBI
+//check TLB
+	//line #	TLBI
+	//entry with TAG
+	
+	//if valid/TLB-hit,
+		//get PPN from TAG-PPN pair
+	//else
+		//go to .pt line #	VPN
+		//if valid
+			return addr
+		//else
+			print "PAGE FAULT"
