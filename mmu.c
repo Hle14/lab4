@@ -8,7 +8,7 @@ void toLine(FILE *file,int line_number)
 
 	char buffer[30];
 	int current_line = 0;
-	//do //skip lines until the desired line (i.e. TLBI) is reached
+	//skip lines until the desired line (i.e. TLBI) is reached
 	while(current_line<line_number)
 	{
 		if(fgets(buffer,30,file) == NULL)
@@ -16,9 +16,9 @@ void toLine(FILE *file,int line_number)
 			printf("error, reached end-of-file");
 			exit(0);
 		}
-		//printf("%s",buffer);
+
 		current_line++;
-	}// while(current_line<line_number);
+	}
 }
 
 int queryTLB(int input,FILE *tlb) //returns a valid address or -1
@@ -29,7 +29,7 @@ int queryTLB(int input,FILE *tlb) //returns a valid address or -1
 	int TLBT = VPN >> 3; //TLB tag = 4 highest order bits of VPN
 	int TLBI = VPN & 7; //TLB index = 3 lowest order bits of VPN
 
-	//toLine(tlb,TLBI,buffer); //jump to TLB index
+
 	toLine(tlb,TLBI); //jump to TLB index
 
 	int valid,tag,ppn,i;
@@ -89,8 +89,7 @@ int main(int argc, char** argv)
 		strcpy(argument,argv[1]);
 		strcat(argument,".pt");
 		pt = fopen(argument,"r");
-		//tlb = fopen(argv[1],"r");
-		//pt = fopen(argv[2],"r");
+
 	} else
 	{
 		printf("usage: %s <filename>.tlb <filename>.pt\n",argv[0]);
@@ -105,7 +104,7 @@ int main(int argc, char** argv)
 
 
 	int input = 0, output = 0;
-	//char buffer[30];
+
 	while(1) //main program loop, exit when user enters -1
 	{
 		//read in virtual address to query from user
@@ -130,55 +129,6 @@ int main(int argc, char** argv)
 		{
 			printf("Illegal virtual address");
 		}
-/*
-		//**extract VPN from input
-		//shift right 11-bits, can use arithmetic shift operator since operand should be positive
-		VPN = input >> 11;
-		VPO = input & 2047;
-		//extract TLBT and TLBI from VPN
-		TLBT = VPN >> 3;
-		TLBI = VPN & 7;
-		//printf("\nVPN:%d\nTLBT:%d\nTLBI:%d\n",VPN,TLBT,TLBI);
-
-		//****check .tlb line# TLBI for TLBT
-		int line_number = 0;
-		do //skip lines until the desired line (i.e. TLBI) is reached
-		{
-			if(fgets(buffer,30,tlb) == NULL)
-			{
-				printf("error, reached end-of-file");
-				exit(0);
-			}
-			//printf("%s",buffer);
-			line_number++;
-		} while(line_number<TLBI);
-
-		//the correct line has been obtained, parse for matches with TLBT
-		int valid,tag,ppn;
-		int i;
-		for(i=0;i<2;i++)
-		{
-			//printf("i = %d",i);
-			fscanf(tlb,"%d %d %d",&valid,&tag,&ppn);
-			//printf("\nvalid = %d\ntag = %d\nTLBT = %d",valid,tag,TLBT);
-			if(valid)
-			{
-				if(tag==TLBT)
-				{
-					//TLB hit, concat PPN with VPO
-					output = (ppn << 11) | VPO;
-					printf("\nPhysical Address: 0x%x (%d) - from the TLB",output,output);
-					break;
-				}
-			} else
-			{
-				break;
-			}
-		}
-
-		rewind(tlb);
-		rewind(pt);
-		*/
 	}
 	return 0;
 }
